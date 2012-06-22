@@ -1,0 +1,46 @@
+(define make-pair
+  (lambda (a b)
+    (cons a (cons b '()))))
+(define set-variable
+  (lambda (var val)
+    (set! bindings (set-variable-help var val bindings))))
+(define set-variable-help
+  (lambda (var val bindings)
+    (cond
+      [(eq? var (first (first bindings)))
+       (cons (make-pair var val) (rest bindings))]
+      [else (cons (first bindings) (set-variable-help var val (rest bindings)))])))
+(define get-variable
+  (lambda (var)
+    (let ((binding (assoc var bindings)))
+      (cond
+        [(list? binding) (first (rest binding))]
+        [else (error "undefined variable" var)]))))
+(define run-evaluator
+  (lambda ()
+    (begin
+      (init-evaluator)
+      (evaluate (parse-program)))))
+(define evaluate
+  (lambda (tree)
+    (cond
+      [(eq? 'semicolon-token (root tree)) (begin (evaluate left-child) (evaluate right-child))]
+      [(eq? 'in-token (root tree)) (set-variable (root (left-child tree)) (value (next-token)))]
+      [(eq? 'out-token (root tree)) (display (value (left-child tree)))]
+      [(eq? 'assign-token (root tree)) (set-variable (left-child tree) (evaluate right-child tree))]
+      [(eq? 'plus-token (root tree)) (+ (evaluate (left-child tree)) (evaluate (right-child tree)))]
+      [(eq? 'minus-token (root tree)) (- (evaluate (left-child tree)) (evaluate (right-child tree)))]
+      [(eq? 'mult-token (root tree)) (* (evaluate (left-child tree)) (evaluate (right-child tree)))]
+      [(eq? 'div-token (root tree))
+       (let ((right (evaluate (right-child tree))))
+         (cond
+           [(eq? right 0) (error "divide by zero")]
+           [else (/ (evaluate (left-child tree)) right)]))]
+      [(number? (root tree)) (root tree)]
+      [else (error "unnexpected opperation or token" (root tree))])))
+(define run-evaluator
+  (lambda ()
+    (begin
+      (init-evaluator)
+      (set-bindings)
+      (evaluate (parse-expr)))))

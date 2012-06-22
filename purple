@@ -1,0 +1,463 @@
+(define not
+  (lambda (a)
+    (equal? a #f)))
+(define not2
+  (lambda (a)
+    (cond
+      [a #f]
+      [else #t])))
+(define xor
+  (lambda (a b)
+    (cond
+      [a (not b)]
+      [else b])))
+(define inor
+  (lambda (a b)
+    (cond
+      [a #t]
+      [else b])))
+(define nor
+  (lambda (a b)
+    (cond
+      [a #f]
+      [else b])))
+(define and2
+  (lambda (a b)
+    (cond
+      [a #f]
+      [else (not b)])))
+(define nand
+  (lambda (a b)
+    (cond
+      [a (not b)]
+      [else #f])))
+(define iff
+  (lambda (a b)
+    (cond
+      [a b]
+      [else (not b)])))
+(define imp
+  (lambda (a b)
+    (cond
+      [a b]
+      [else #t])))
+(define second 
+  (lambda (p) (first (rest p))))
+(define third
+  (lambda (p) (first (rest (rest p)))))
+(define secons
+  (lambda (r s)
+    (cons (second r) s)))
+(define L
+  (lambda (a b)
+    (cond
+      [(atom? b) (first a)]
+      [else (rest a)])))
+(define atombomb
+  (lambda (a b)
+    (cond
+      [(equal? (equal? (atom? a) (atom? b)) #t) (cons a (cons b '()))]
+      [(atom? a) (cons a b)]
+      [(atom? b) (cons b a)]
+      [else (cons b a)])))
+(define heads
+  (lambda (a b)
+    (cond
+      [(both-null? a b) '()]
+      [else (heads-help1 a b)])))
+(define both-null?
+  (lambda (a b)
+    (and2 (null? a) (null? b))))
+(define heads-help1
+  (lambda (a b)
+    (cond
+      [(both-non-null? a b) (heads-combine a b)]
+      [else (heads-help2 a b)])))
+(define both-non-null?
+  (lambda (a b)
+    (nor (null? a) (null? b))))
+(define heads-combine
+  (lambda (a b)
+    (cons (first a) (cons (first b) '()))))
+(define heads-help2
+  (lambda (a b)
+    (cond
+      [(null? a) (first b)]
+      [else (first a)])))
+(define atom-or-list
+  (lambda (a)
+    (cond
+      [(atom? a) 'atom]
+      [else 'list])))
+(define lat?
+  (lambda (a)
+    (cond
+      [(null? a) #t]
+      [(atom? (first a)) (lat? (rest a))]
+      [else #f])))
+(define member?
+  (lambda (a s)
+    (cond
+      [(null? s) #f]
+      [(equal? (first s) a) #t]
+      [else (member? a (rest s))])))
+(define lili?
+  (lambda (a)
+    (cond
+      [(null? a) #t]
+      [(atom? (first a)) #f]
+      [else (lili? (rest a))])))
+(define atomic?
+  (lambda (a)
+    (cond
+      [(atom? a) #t]
+      [(null? a) #t]
+      [else #f])))
+(define non-atomic?
+  (lambda (a)
+    (cond
+      [(null? a) #t]
+      [(not (atomic? (first a))) (non-atomic? (rest a))]
+      [else #f])))
+(define latel?
+  (lambda (a)
+    (cond
+      [(null? a) #t]
+      [(atomic? (first a)) (latel? (rest a))]
+      [else #f])))
+(define eqlat?
+  (lambda (a b)
+    (cond
+      [(null? a) a]
+      [else #f
+       
+       
+       
+       
+       ])))
+      
+(define rember
+  (lambda (a s)
+    (cond
+      [(null? s) '()]
+      [(equal? (first s) a) (rest s)]
+      [else (cons (first s) (rember a (rest s)))])))
+(define getfirsts
+  (lambda (s)
+    (cond
+      [(null? s) '()]
+      [else (cons (first s)(getfirsts (rest s)))])))
+(define  dupla
+  (lambda (a s)
+    (cond
+      [(null? s) '()]
+      [else (cons a (dupla a (rest s)))])))
+(define double
+  (lambda (a s)
+    (cond
+      [(null? s) '()]
+      [(equal? (first s) a) (cons a s)]
+      [else (cons (first s) (double a (rest s)))])))
+(define insert1
+  (lambda (a b s)
+    (cond
+      [(null? s) '()]
+      [(equal? (first s) a) (cons b s)]
+      [else (cons (first s) (insert1 a b (rest s)))])))
+(define less?
+      (lambda (m n)
+        (cond
+          [(equal? m n) #f]
+          [(zero? m) #t]
+          [(zero? n) #f]
+          [else (less? (sub1 m) (sub1 n))])))
+(define next-please
+     (lambda (n)
+        (next-please-help n (max-num n))))
+(define next-please-help
+     (lambda (nums biggest) (cons biggest (rember biggest nums))))
+(define max-num
+      (lambda (n) (max-num-help n 0)))
+(define max-num-help
+     (lambda (nums acc)
+       (cond
+         [(null? nums) acc]
+         [(less? acc (first nums)) (max-num-help (rest nums) (first nums))]
+         [else (max-num-help (rest nums) acc)])))
+(define make-leaf
+  (lambda (a)
+    (cons a (cons '() (cons '() '())))))
+(define leaf?
+  (lambda (a)
+    (cond
+      [(not (null? (rest a))) #f]
+      [(not (null? (rest (rest a)))) #f]
+      [else #t])))
+(define switch-subtrees
+  (lambda (a)
+    (cons (first a) (cons (rest (rest a)) (rest a)))))
+(define replace-root
+  (lambda (a v)
+    (cons v (cons (rest a) (cons (rest (rest a)))))))
+(define replace-left-tree
+  (lambda (trA trB)
+    (cons (first trA) (cons (first (rest trB)) (rest (rest (trA)))))))
+(define replace-right-tree
+  (lambda (trA trB)
+    (cons (first trA) (cons (first (rest trA)) (rest (rest (trB)))))))
+(define selection-sort
+  (lambda (n)
+    (cond
+      [(null? n) '()]
+      [else (cons (first (n-p n)) (selection-sort (rest (first (n-p n)))))])))
+(define fib
+  (lambda (n)
+    (fib-help n 0 1)))
+(define fib-help
+  (lambda (a b c)
+    (cond
+      [(zero? a) b]
+      [else (fib-help (- a 1) c (+ b c))])))
+(define tree-insert
+  (lambda (a obt)
+    (cond
+      [(null? obt) (make-leaf a)]
+      [(order? a (root obt))
+       (replace-left-tree
+         obt (tree-insert a (left-tree obt)))]
+      [else (replace-right-tree
+              obt
+              (tree-insert a (right-tree obt)))])))
+(define order?
+  (lambda (a b)
+    (order?-help (explode a) (explode b))))
+(define order?-help
+  (lambda (r s)
+    (cond 
+      [(null? r) r])))
+
+
+;data abstractors for tokens
+
+(define make-token
+  (lambda (type value)
+    (cons type (cons value '()))))
+
+(define type
+  (lambda (token)
+    (first token)))
+
+(define value
+  (lambda (token)
+    (first (rest token))))
+
+;top-level function
+(define next-token
+  (lambda ()
+    (decide-next-token (next-char))))
+
+(define decide-next-token
+  (lambda (current-char)
+    (cond
+      [(space? current-char) (decide-next-token (next-char))] ;discard white space
+      [(letter? current-char) (letter-start current-char)]
+      [(symbol? current-char) (symbol-start current-char)]
+      [else (error "Illegal character: " current-char)])))
+
+;The straightforward way to decide what token to produce is to use all these nested conds.
+;You can do it more efficiently using a helping function that takes as its parameter an assoc
+;list mapping from characters to tokens.  However, for the purposes of this example (and in
+;order not to give away _everything_ about the final project), I'm using the naive method here.
+(define letter-start
+  (lambda (current-char)
+    (cond
+      [(eq? current-char #\A) (check-for-and-token (next-char))]
+      [(eq? current-char #\O) (check-for-or-token (next-char))]
+      [else (make-token 'identifier-token current-char)])))
+
+(define check-for-and-token
+  (lambda (following-char)
+    (cond
+      [(eq? #\N following-char) (make-token 'and-token '())]
+      [else (begin (save-char following-char) (make-token 'identifier-token #\A))])))
+
+(define check-for-or-token
+  (lambda (following-char)
+    (cond
+      [(eq? #\R following-char) (make-token 'or-token '())]
+      [else (begin (save-char following-char) (make-token 'identifier-token #\O))])))
+
+(define symbol-start
+  (lambda (current-char)
+    (cond
+      [(eq? current-char #\~) (make-token 'not-token '())]
+      [(eq? current-char #\=) (check-for-implies-token (next-char))]
+      [(eq? current-char #\() (make-token 'left-p-token '())]
+      [(eq? current-char #\)) (make-token 'right-p-token '())]
+      [(eq? current-char #\.) (make-token 'end-token '())]
+      [else (error "illegal character " current-char)])))
+
+(define check-for-implies-token
+  (lambda (following-char)
+    (cond
+      [(eq? #\> following-char) (make-token 'implies-token '())]
+      [else (begin (save-char following-char) (make-token 'equiv-token '()))])))
+
+
+;grammar for WFFs:
+;Formula -> WFF end-token
+;WFF -> WFF term-op Term | Term
+;term-op -> implies-token | equiv-token
+;Term -> Term arg-op Argument | Argument
+;arg-op -> and-token | or-token
+;Argument -> not-token Argument | left-p-token WFF right-p-token | identifier-token
+
+;lexical definitions:
+;end-token: .
+;implies-token: =>
+;equiv-token: =
+;and-token: AN
+;or-token: OR
+;not-token: ~
+;left-p-token: (
+;right-p-token: )
+;identifier-token: A | B | C | ... | Z
+
+;Note that the two left-recursive productions WFF -> WFF term-op Term and
+;Term -> Term arg-op Argument can be expressed as regular expressions
+;WFF -> Term [term-op Term]* and Term -> Argument [arg-op Argument]*, respectively.
+;The parsing functions for these symbols act according to such a translation.
+
+;tree constructors
+(define make-leaf
+  (lambda (val)
+    (cons val '())))
+
+(define make-unary-node
+  (lambda (parent child)
+    (cons parent (cons child '()))))
+
+(define make-binary-node
+  (lambda (parent left-child right-child)
+    (cons parent (cons left-child (cons right-child '())))))
+
+;tree extractors (in a case in which it's possible for a node in the tree to have more than two
+;children, you can construct a more general tree extractor by defining and instantiating a
+;curried extractor).
+
+(define root first)
+
+(define left-child
+  (lambda (tree)
+    (first (rest tree))))
+
+(define right-child
+  (lambda (tree)
+    (first (rest (rest tree)))))
+
+;parsing functions
+
+(define parse-identifier
+  (lambda (token)
+    (cond
+      [(eq? (type token) 'identifier-token) (make-leaf (value token))]
+      [else (error "unexpected token " (type token))])))
+
+;Notice the use of "let" here.  This serves two purposes: it defines the order in which tokens
+;are consumed from the input stream, and it allows actions, such as checking for a right
+;parenthesis, to occur between the time the tree is parsed and the time it is returned.  You
+;will find many similar uses of "let" in the functions that follow.
+
+(define parse-argument
+  (lambda (token)
+    (cond
+      [(eq? (type token) 'not-token) (make-unary-node 'not-token (parse-argument (get-next-token)))]
+      [(eq? (type token) 'left-p-token)
+       (let ((tree (parse-wff (get-next-token))))
+         (cond
+           [(eq? (type (get-next-token)) 'right-p-token) tree]
+           [else (error "missing right parenthesis")]))]
+      [else (parse-identifier token)])))
+
+(define parse-term
+  (lambda (token)
+    (let ((first-argument (parse-argument token)))
+      (parse-argument-suffix (get-next-token) first-argument))))
+
+
+;invariant: left-tree is a parse tree that represents all the Arguments in the Term that are to
+;the left of operator.
+;bound: the number of Arguments in this Term that remain to be parsed.
+(define parse-argument-suffix
+  (lambda (operator left-tree)
+    (cond
+      [(or (eq? (type operator) 'and-token) (eq? (type operator) 'or-token))
+       (let ((new-left-tree (make-binary-node (type operator) left-tree (parse-argument (get-next-token)))))
+         (parse-argument-suffix (get-next-token) new-left-tree))]
+      [else (begin (save-token operator) left-tree)])))
+
+(define parse-wff
+  (lambda (token)
+    (let ((first-term (parse-term token)))
+      (parse-term-suffix (get-next-token) first-term))))
+
+;invariant: left-tree is a parse tree that represents all the Terms in this WFF that are to the
+;left of operator.
+;bound: the number of Terms in this WFF that remain to be parsed.
+(define parse-term-suffix
+  (lambda (operator left-tree)
+    (cond
+      [(or (eq? (type operator) 'implies-token) (eq? (type operator) 'equiv-token))
+       (let ((new-left-tree (make-binary-node (type operator) left-tree (parse-term (get-next-token)))))
+         (parse-term-suffix (get-next-token) new-left-tree))]
+      [else (begin (save-token operator) left-tree)])))
+
+;top-level parsing function
+(define parse-formula
+  (lambda ()
+    (begin
+      (init-parser)
+      (let ((formula (parse-wff (get-next-token))))
+        (cond
+          [(eq? (type (get-next-token)) 'end-token) formula]
+          [else (error "expected '.'")])))))
+
+(define make-pair
+  (lambda (a b)
+    (cons a (cons b '()))))
+
+(define set-variable
+  (lambda (var val)
+    (set! bindings (set-variable-help var val bindings))))
+
+(define set-variable-help
+  (lambda (var val bindings)
+    (cond
+      [(eq? var (first (first bindings)))
+       (cons (make-pair var val) (rest bindings))]
+      [else (cons (first bindings) (set-variable-help var val (rest bindings)))])))
+
+(define get-variable
+  (lambda (var)
+    (let ((binding (assoc var bindings)))
+      (cond
+        [(list? binding) (first (rest binding))]
+        [else (error "undefined variable" var)]))))
+
+(define evaluate
+  (lambda (tree)
+    (cond
+      [(eq? 'not-token (root tree)) (not (evaluate (left-child tree)))]
+      [(eq? 'and-token (root tree)) (and (evaluate (left-child tree)) (evaluate (right-child tree)))]
+      [(eq? 'or-token (root tree)) (or (evaluate (left-child tree)) (evaluate (right-child tree)))]
+      [(eq? 'implies-token (root tree)) (or (not (evaluate (left-child tree))) (evaluate (right-child-tree)))]
+      [(eq? 'equiv-token (root tree)) (eq? (evaluate (left-child tree)) (evaluate (right-child tree)))]
+      [(letter? (root tree)) (get-variable (root tree))])))
+
+;top-level function
+(define run-evaluator
+  (lambda ()
+    (begin
+      (init-evaluator)
+      (set-bindings) ;we assume that this routine is supplied elsewhere - it uses set-variable.
+      (evaluate (parse-formula)))))
